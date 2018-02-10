@@ -11,19 +11,20 @@ css: custom.css
   
 Good code
 ===
-
+My definition...
 - Does it's job
 - Works in different contexts
 - Easily understood
 - Easily modified by colleague, or yourself in the future
 - Efficient
 
+Trade-offs
 
-Example data
+Example: data
 ===
 incremental: false
 
-CSV file: Columns are participant ID, gender, age, and performance in a task
+CSV file: Columns are participant ID, gender, year of birth, and performance in a task
 
 ```{r, echo=FALSE}
 library(tidyverse)
@@ -46,7 +47,7 @@ incremental: false
 ```{r, eval=FALSE}
 data <- read_csv("participant_performance.csv")
 data =data %>%
-  filter((x-mean(x)/sd(x) < 3) & (x-mean(x)/sd(x) > -3))
+  filter(((x-mean(x))/sd(x) < 3) & ((x-mean(x))/sd(x) > -3))
 data$a <- as.integer(format(Sys.Date(), "%Y"))-data$y
 
 data2 <- filter(data, female == F)
@@ -76,6 +77,10 @@ data2 <- filter(data, female == F)
 Comments
 ===
 
+![Push?](images/push.jpg)
+
+***
+
 - Comments can't fix the code
 - Comments get left outdated 
 - Takes extra time (both reading and writing)
@@ -84,46 +89,47 @@ Comments
   - Can the code be changed to remove the need for a comment?
 
 
-***
-
-![Push?](images/push.jpg)
-
-At the top of our script..
+Naming / Abstraction
 ===
 incremental: false
+At the top of our script...
 ```{r}
 # CONSTANTS
+
 z_cutoff <- 3
+
 current_year <- Sys.Date() %>% 
   format("%Y") %>% 
   as.integer()
 
+
 # FUNCTIONS
+
 zscore <- function(x){
-  (x-mean(x))/sd(x)
+  (x - mean(x)) / sd(x)
 }
 ```
 
 Naming
 ===
 incremental: false
-And the **D**ont **R**epeat **Y**ourself principle
+
 ```{r, eval=FALSE}
 # READ RAW DATA
-scores_data_raw <- read_csv("participant_performance.csv") %>% 
+perf_data_raw <- read_csv("participant_performance.csv") %>% 
   rename(participantID = p, is_female = female, year_of_birth =y,performance = x) %>%
   mutate(gender = ifelse(is_female, "Female", "Male")) %>% 
   select(-is_female) #remove redundant column
 
 # PREPROCESS
-scores_data =scores_data_raw %>%
-  filter((zscore(performance) < z_cutoff) &
-         (zscore(performance) > -z_cutoff))
+perf_data =perf_data_raw %>%
+  filter(abs(performance_z) < z_cutoff) 
 
-scores_data$age <- current_year-scores_data$year_of_birth
-scores_Males <- filter(data, gender == "Male")
+perf_data$age <- current_year-perf_data$year_of_birth
+perf_Males <- filter(data, gender == "Male")
 ```
-
+* **P**rinciple **O**f **L**east **A**stonishment
+* **D**ont **R**epeat **Y**ourself principle
 
 Consistency & Formatting
 ===
@@ -132,7 +138,7 @@ incremental: false
 Keep a consistent style e.g. [Tidyverse style guide](http://style.tidyverse.org/), [Google's R style guide](https://google.github.io/styleguide/Rguide.xml)
 ```{r final, eval=FALSE}
 # READ RAW DATA
-scores_data_raw <- read_csv("participant_performance.csv") %>% 
+perf_data_raw <- read_csv("participant_performance.csv") %>% 
   rename(participant_id = p,
          is_female = female,
          year_of_birth = y,
@@ -141,12 +147,12 @@ scores_data_raw <- read_csv("participant_performance.csv") %>%
   select(-is_female) #remove redundant column
 
 # PREPROCESS
-scores_data <- scores_data_raw %>%
+perf_data <- perf_data_raw %>%
   mutate(performance_z = zscore(performance)) %>%
   filter(abs(performance_z) < z_cutoff) %>% 
   mutate(age = current_year - year_of_birth)
 
-scores_males <- scores_data %>%
+perf_males <- perf_data %>%
   filter(gender == "Male")
 ```
 
@@ -191,6 +197,7 @@ Abstraction & levels of complexity
   - Put on slippers
   - Brush teeth
   - Make coffee
+  _ ...
 
 
 Hide complexity
@@ -203,7 +210,7 @@ Hide complexity
   - `head_pl <- path_length(head)`
 
 
-Creating tools
+Goals of programming
 ===
 
 - Do not use R (or MATLAB, Python, LabVIEW...) exclusively like a "tool"

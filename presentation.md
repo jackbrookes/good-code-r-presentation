@@ -11,37 +11,38 @@ css: custom.css
   
 Good code
 ===
-
+My definition...
 - Does it's job
 - Works in different contexts
 - Easily understood
 - Easily modified by colleague, or yourself in the future
 - Efficient
 
+Trade-offs
 
-Example data
+Example: data
 ===
 incremental: false
 
-CSV file: Columns are participant ID, gender, age, and performance in a task
+CSV file: Columns are participant ID, gender, year of birth, and performance in a task
 
 
 ```
        p female    y         x
-1  P_001  FALSE 1968 43.694022
-2  P_002  FALSE 1977 18.068902
-3  P_003   TRUE 1966 41.103788
-4  P_004  FALSE 1995 20.111353
-5  P_005   TRUE 1996 46.189773
-6  P_006   TRUE 1971 49.175048
-7  P_007   TRUE 1991 13.659537
-8  P_008  FALSE 1963  8.391421
-9  P_009  FALSE 1990 15.038065
-10 P_010   TRUE 1962 20.704209
-11 P_011   TRUE 1967 -5.849036
-12 P_012   TRUE 1973 17.571438
-13 P_013  FALSE 1972 21.349949
-14 P_014  FALSE 1993 32.912939
+1  P_001   TRUE 1995 15.165281
+2  P_002   TRUE 1986 40.151915
+3  P_003  FALSE 1973 23.657257
+4  P_004  FALSE 1984 12.494387
+5  P_005  FALSE 1978 21.257417
+6  P_006   TRUE 1988 -2.333408
+7  P_007  FALSE 1961 35.544256
+8  P_008  FALSE 1983 31.367408
+9  P_009  FALSE 1968 18.485300
+10 P_010  FALSE 1975 30.785857
+11 P_011  FALSE 1973  5.632823
+12 P_012  FALSE 1996 15.562307
+13 P_013   TRUE 1984 37.171223
+14 P_014   TRUE 1981 31.615556
 ```
 
 Example code
@@ -51,7 +52,7 @@ incremental: false
 ```r
 data <- read_csv("participant_performance.csv")
 data =data %>%
-  filter((x-mean(x)/sd(x) < 3) & (x-mean(x)/sd(x) > -3))
+  filter(((x-mean(x))/sd(x) < 3) & ((x-mean(x))/sd(x) > -3))
 data$a <- as.integer(format(Sys.Date(), "%Y"))-data$y
 
 data2 <- filter(data, female == F)
@@ -81,6 +82,10 @@ data2 <- filter(data, female == F)
 Comments
 ===
 
+![Push?](images/push.jpg)
+
+***
+
 - Comments can't fix the code
 - Comments get left outdated 
 - Takes extra time (both reading and writing)
@@ -89,48 +94,49 @@ Comments
   - Can the code be changed to remove the need for a comment?
 
 
-***
-
-![Push?](images/push.jpg)
-
-At the top of our script..
+Naming / Abstraction
 ===
 incremental: false
+At the top of our script...
 
 ```r
 # CONSTANTS
+
 z_cutoff <- 3
+
 current_year <- Sys.Date() %>% 
   format("%Y") %>% 
   as.integer()
 
+
 # FUNCTIONS
+
 zscore <- function(x){
-  (x-mean(x))/sd(x)
+  (x - mean(x)) / sd(x)
 }
 ```
 
 Naming
 ===
 incremental: false
-And the **D**ont **R**epeat **Y**ourself principle
+
 
 ```r
 # READ RAW DATA
-scores_data_raw <- read_csv("participant_performance.csv") %>% 
+perf_data_raw <- read_csv("participant_performance.csv") %>% 
   rename(participantID = p, is_female = female, year_of_birth =y,performance = x) %>%
   mutate(gender = ifelse(is_female, "Female", "Male")) %>% 
   select(-is_female) #remove redundant column
 
 # PREPROCESS
-scores_data =scores_data_raw %>%
-  filter((zscore(performance) < z_cutoff) &
-         (zscore(performance) > -z_cutoff))
+perf_data =perf_data_raw %>%
+  filter(abs(performance_z) < z_cutoff) 
 
-scores_data$age <- current_year-scores_data$year_of_birth
-scores_Males <- filter(data, gender == "Male")
+perf_data$age <- current_year-perf_data$year_of_birth
+perf_Males <- filter(data, gender == "Male")
 ```
-
+* **P**rinciple **O**f **L**east **A**stonishment
+* **D**ont **R**epeat **Y**ourself principle
 
 Consistency & Formatting
 ===
@@ -140,7 +146,7 @@ Keep a consistent style e.g. [Tidyverse style guide](http://style.tidyverse.org/
 
 ```r
 # READ RAW DATA
-scores_data_raw <- read_csv("participant_performance.csv") %>% 
+perf_data_raw <- read_csv("participant_performance.csv") %>% 
   rename(participant_id = p,
          is_female = female,
          year_of_birth = y,
@@ -149,12 +155,12 @@ scores_data_raw <- read_csv("participant_performance.csv") %>%
   select(-is_female) #remove redundant column
 
 # PREPROCESS
-scores_data <- scores_data_raw %>%
+perf_data <- perf_data_raw %>%
   mutate(performance_z = zscore(performance)) %>%
   filter(abs(performance_z) < z_cutoff) %>% 
   mutate(age = current_year - year_of_birth)
 
-scores_males <- scores_data %>%
+perf_males <- perf_data %>%
   filter(gender == "Male")
 ```
 
@@ -166,20 +172,20 @@ incremental: false
 
 ```
    participant_id year_of_birth performance gender performance_z age
-1           P_001          1968   43.694022   Male     1.2940755  50
-2           P_002          1977   18.068902   Male    -0.4718779  41
-3           P_003          1966   41.103788 Female     1.1155697  52
-4           P_004          1995   20.111353   Male    -0.3311226  23
-5           P_005          1996   46.189773 Female     1.4660699  22
-6           P_006          1971   49.175048 Female     1.6718000  47
-7           P_007          1991   13.659537 Female    -0.7757490  27
-8           P_008          1963    8.391421   Male    -1.1388008  55
-9           P_009          1990   15.038065   Male    -0.6807479  28
-10          P_010          1962   20.704209 Female    -0.2902659  56
-11          P_011          1967   -5.849036 Female    -2.1201809  51
-12          P_012          1973   17.571438 Female    -0.5061606  45
-13          P_013          1972   21.349949   Male    -0.2457648  46
-14          P_014          1993   32.912939   Male     0.5510979  25
+1           P_001          1995   15.165281 Female   -0.68743390  23
+2           P_002          1986   40.151915 Female    1.15942576  32
+3           P_003          1973   23.657257   Male   -0.05975882  45
+4           P_004          1984   12.494387   Male   -0.88485006  34
+5           P_005          1978   21.257417   Male   -0.23714031  40
+6           P_006          1988   -2.333408 Female   -1.98083027  30
+7           P_007          1961   35.544256   Male    0.81885572  57
+8           P_008          1983   31.367408   Male    0.51012857  35
+9           P_009          1968   18.485300   Male   -0.44203833  50
+10          P_010          1975   30.785857   Male    0.46714387  43
+11          P_011          1973    5.632823   Male   -1.39201505  45
+12          P_012          1996   15.562307   Male   -0.65808816  22
+13          P_013          1984   37.171223 Female    0.93911120  34
+14          P_014          1981   31.615556 Female    0.52847014  37
 ```
 
 
@@ -205,6 +211,7 @@ Abstraction & levels of complexity
   - Put on slippers
   - Brush teeth
   - Make coffee
+  _ ...
 
 
 Hide complexity
@@ -217,7 +224,7 @@ Hide complexity
   - `head_pl <- path_length(head)`
 
 
-Creating tools
+Goals of programming
 ===
 
 - Do not use R (or MATLAB, Python, LabVIEW...) exclusively like a "tool"
