@@ -18,7 +18,7 @@ My definition...
 - Easily modified by colleague, or yourself in the future
 - Efficient
 
-Trade-offs
+Balance of trade-offs
 
 Example: data
 ===
@@ -27,23 +27,21 @@ incremental: false
 CSV file: Columns are participant ID, gender, year of birth, and performance in a task
 
 
-```
-       p female    y         x
-1  P_001   TRUE 1995 15.165281
-2  P_002   TRUE 1986 40.151915
-3  P_003  FALSE 1973 23.657257
-4  P_004  FALSE 1984 12.494387
-5  P_005  FALSE 1978 21.257417
-6  P_006   TRUE 1988 -2.333408
-7  P_007  FALSE 1961 35.544256
-8  P_008  FALSE 1983 31.367408
-9  P_009  FALSE 1968 18.485300
-10 P_010  FALSE 1975 30.785857
-11 P_011  FALSE 1973  5.632823
-12 P_012  FALSE 1996 15.562307
-13 P_013   TRUE 1984 37.171223
-14 P_014   TRUE 1981 31.615556
-```
+|p     |female |    y|         x|
+|:-----|:------|----:|---------:|
+|P_001 |FALSE  | 1957| 51.645948|
+|P_002 |FALSE  | 1980| 56.726900|
+|P_003 |FALSE  | 1996|  7.394432|
+|P_004 |FALSE  | 1964| 40.092979|
+|P_005 |TRUE   | 1988| 12.364888|
+|P_006 |TRUE   | 1968|  6.438655|
+|P_007 |FALSE  | 1959| 14.990385|
+|P_008 |TRUE   | 1968|  7.856301|
+|P_009 |TRUE   | 1979| 24.247090|
+|P_010 |FALSE  | 1986| -2.279847|
+|P_011 |TRUE   | 1980| 41.053064|
+|P_012 |FALSE  | 1976| 20.728537|
+|P_013 |FALSE  | 1987| 34.522459|
 
 Example code
 ===
@@ -170,25 +168,27 @@ Big payoff now our script and data is "tidy"
 incremental: false
 
 
-```
-   participant_id year_of_birth performance gender performance_z age
-1           P_001          1995   15.165281 Female   -0.68743390  23
-2           P_002          1986   40.151915 Female    1.15942576  32
-3           P_003          1973   23.657257   Male   -0.05975882  45
-4           P_004          1984   12.494387   Male   -0.88485006  34
-5           P_005          1978   21.257417   Male   -0.23714031  40
-6           P_006          1988   -2.333408 Female   -1.98083027  30
-7           P_007          1961   35.544256   Male    0.81885572  57
-8           P_008          1983   31.367408   Male    0.51012857  35
-9           P_009          1968   18.485300   Male   -0.44203833  50
-10          P_010          1975   30.785857   Male    0.46714387  43
-11          P_011          1973    5.632823   Male   -1.39201505  45
-12          P_012          1996   15.562307   Male   -0.65808816  22
-13          P_013          1984   37.171223 Female    0.93911120  34
-14          P_014          1981   31.615556 Female    0.52847014  37
-```
+|participant_id | year_of_birth| performance|gender | performance_z| age|
+|:--------------|-------------:|-----------:|:------|-------------:|---:|
+|P_001          |          1957|   51.645948|Male   |     1.7931049|  61|
+|P_002          |          1980|   56.726900|Male   |     2.1279487|  38|
+|P_003          |          1996|    7.394432|Male   |    -1.1231498|  22|
+|P_004          |          1964|   40.092979|Male   |     1.0317434|  54|
+|P_005          |          1988|   12.364888|Female |    -0.7955878|  30|
+|P_006          |          1968|    6.438655|Female |    -1.1861372|  50|
+|P_007          |          1959|   14.990385|Male   |    -0.6225628|  59|
+|P_008          |          1968|    7.856301|Female |    -1.0927118|  50|
+|P_009          |          1979|   24.247090|Female |    -0.0125292|  39|
+|P_010          |          1986|   -2.279847|Male   |    -1.7607022|  32|
+|P_011          |          1980|   41.053064|Female |     1.0950147|  38|
+|P_012          |          1976|   20.728537|Male   |    -0.2444082|  42|
+|P_013          |          1987|   34.522459|Male   |     0.6646361|  31|
+|P_014          |          1992|    7.856127|Female |    -1.0927232|  26|
 
 
+Programming principles and tips
+===
+type: sub-section
 
 Abstraction & levels of complexity
 === 
@@ -197,8 +197,8 @@ Abstraction & levels of complexity
 - Morning routine:
 - Don't:
   - Open eyes
-  - Move arm 50cm towards alarm clock
-  - Depress index finger on off button
+  - Move arm 52.8cm towards alarm clock
+  - Depress index finger on off button with force of 1.4N
   - Put feet on floor
   - ...
 
@@ -211,7 +211,7 @@ Abstraction & levels of complexity
   - Put on slippers
   - Brush teeth
   - Make coffee
-  _ ...
+  - ...
 
 
 Hide complexity

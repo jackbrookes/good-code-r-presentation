@@ -18,7 +18,7 @@ My definition...
 - Easily modified by colleague, or yourself in the future
 - Efficient
 
-Trade-offs
+Balance of trade-offs
 
 Example: data
 ===
@@ -28,6 +28,7 @@ CSV file: Columns are participant ID, gender, year of birth, and performance in 
 
 ```{r, echo=FALSE}
 library(tidyverse)
+library(rmarkdown)
 
 num <- 100
 data_example <- tibble(
@@ -38,7 +39,7 @@ data_example <- tibble(
 ) %>%
   as.data.frame()
 
-data_example %>% head(14)
+data_example %>% head(13) %>% kable()
 ```
 
 Example code
@@ -171,10 +172,14 @@ data_example %>%
   mutate(performance_z = zscore(performance)) %>%
   filter(abs(performance_z) < z_cutoff) %>% 
   mutate(age = current_year - year_of_birth) %>% 
-  head(14)
+  head(14) %>% 
+  kable()
 ```
 
 
+Programming principles and tips
+===
+type: sub-section
 
 Abstraction & levels of complexity
 === 
@@ -183,8 +188,8 @@ Abstraction & levels of complexity
 - Morning routine:
 - Don't:
   - Open eyes
-  - Move arm 50cm towards alarm clock
-  - Depress index finger on off button
+  - Move arm 52.8cm towards alarm clock
+  - Depress index finger on off button with force of 1.4N
   - Put feet on floor
   - ...
 
@@ -197,7 +202,7 @@ Abstraction & levels of complexity
   - Put on slippers
   - Brush teeth
   - Make coffee
-  _ ...
+  - ...
 
 
 Hide complexity
