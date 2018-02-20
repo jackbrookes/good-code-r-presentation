@@ -1,0 +1,105 @@
+---
+title: "Example"
+author: "Jack Brookes"
+date: "17 February 2018"
+output: 
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(cowplot)
+```
+
+
+## Import data
+
+Import trial data.
+```{r message = FALSE}
+
+data_folder <- "data"
+
+df_trials_raw <- list.files(paste(data_folder, "postural_sway", sep = "/"),
+           pattern = "*trial_results.csv",
+           recursive = TRUE,
+           full.names = TRUE) %>% 
+  map_dfr(read_csv)
+
+head(df_trials_raw, 10)
+```
+
+Check time length for each trial
+
+```{r}
+df_trials_raw %>% 
+  mutate(dt = end_time - start_time) %>% 
+  summary()
+
+
+df_trials_raw %>% 
+  group_by(ppid) %>% 
+  summarise(n_trials = n())
+```
+
+
+
+# Preprocess
+
+Define a path length function, then calculate path length for each trial
+```{r message = FALSE}
+
+calculate_path_length <- Vectorize(function(filepath){
+  full_path <- paste(data_folder, filepath, sep = "/")
+  head_movement <- read_csv(full_path)
+  sum((diff(head_movement$pos_x)^2 + diff(head_movement$pos_y)^2 + diff(head_movement$pos_z)^2)^0.5)
+})
+
+
+df_trials <- df_trials_raw %>% 
+  mutate(head_path_length = calculate_path_length(head_movement_relpath)) %>% 
+  select(-head_movement_relpath)
+
+head(df_trials, 10)
+
+```
+
+```{r}
+ggplot(df_trials, aes(x = as.factor(session_num), y = head_path_length, group = assessment_type)) + 
+  geom_point(aes(color = assessment_type), position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.35), alpha = .1) + 
+  stat_summary(fun.y = mean, geom = "point", size = 2, position = position_dodge(width = 0.35)) + 
+  stat_summary(fun.data = mean_se, geom = "errorbar", width = .2, position = position_dodge(width = 0.35)) + 
+  geom_text(aes(label = session_num, y = 0.7), position = position_dodge(width = 0.35)) + 
+  scale_y_continuous(limits = c(0, NA)) + 
+  labs(y = "Head path length (m)", color = "Assessment")
+```
+
+
+Join trial data with pp list data (for age, gender)
+
+```{r message = FALSE}
+
+participant_list <- paste(data_folder, "participant_list.csv", sep = "/") %>% 
+  read_csv()
+
+df_trials <- df_trials %>% 
+  left_join(participant_list)
+```
+
+
+Plot related to gender
+
+```{r}
+
+ggplot(df_trials, aes(x = assessment_type, y = head_path_length, group = gender)) + 
+  geom_point(aes(color = gender), position = position_dodge(width = .2), alpha = .5) + 
+  stat_summary(fun.y = mean, geom = "point", size = 2, position = position_dodge(width = .2)) +  
+  stat_summary(fun.data = mean_se, geom = "errorbar", width = .2, position = position_dodge(width = .2)) +
+  facet_grid(~session_num)
+
+```
+
+
+
+

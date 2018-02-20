@@ -1,0 +1,1 @@
+{"practiceTrials":6,"baselineTrials":27,"mainTrials":48,"angleBetweenSelections":25,"selectionDistances":[1,1.3,1.5],"targetYPositionRelative":0.9,"minDelay":0.75,"maxDelay":1.5,"safeBubbleRelDistance":0.7,"thinkTimeMin":0.3,"thinkTimeMax":0.5,"pseudoRandomDecisionOrder":true,"risky_bubble_reward":5}

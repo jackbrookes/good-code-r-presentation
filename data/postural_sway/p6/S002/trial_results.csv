@@ -1,0 +1,4 @@
+ppid,session_num,trial_num,block_num,trial_num_in_block,start_time,end_time,head_movement_relpath,assessment_type
+p6,2,1,1,1,41.94827,71.94669,postural_sway/p6/S002/movement_head_T001.csv,RoomOscillate
+p6,2,2,1,2,79.30485,109.3035,postural_sway/p6/S002/movement_head_T002.csv,Vision
+p6,2,3,1,3,113.751,143.7491,postural_sway/p6/S002/movement_head_T003.csv,NoVision
