@@ -37,7 +37,6 @@ df_trials_raw %>%
   mutate(dt = end_time - start_time) %>% 
   summary()
 
-
 df_trials_raw %>% 
   group_by(ppid) %>% 
   summarise(n_trials = n())

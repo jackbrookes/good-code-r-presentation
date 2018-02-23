@@ -8,15 +8,19 @@ font-import: http://fonts.googleapis.com/css?family=Roboto+Condensed|Roboto+Mono
 font-family: 'Roboto Condensed'
 incremental: true
 css: custom.css
-  
-Good code
+
+What is good code?
 ===
-My definition...
-- Does it's job
-- Works in different contexts
-- Easily understood
-- Easily modified by colleague, or yourself in the future
-- Efficient
+
+<img src="images/cleancode.jpg" alt="cleancode" style="width: 300px;"/>
+
+*** 
+
+- "Efficient"
+- "Readable"
+- "Maintainable"
+- "Unsurprising"
+- "Elegant"
 
 Balance of trade-offs
 
@@ -27,21 +31,21 @@ incremental: false
 CSV file: Columns are participant ID, gender, year of birth, and performance in a task
 
 
-|p     |female |    y|         x|
-|:-----|:------|----:|---------:|
-|P_001 |FALSE  | 1987| 13.879390|
-|P_002 |FALSE  | 1974| 35.076083|
-|P_003 |TRUE   | 1969|  6.965215|
-|P_004 |TRUE   | 1965| 14.926262|
-|P_005 |FALSE  | 1972| 19.914346|
-|P_006 |TRUE   | 1987| 37.925976|
-|P_007 |TRUE   | 1989| 20.377774|
-|P_008 |FALSE  | 1984| 39.155802|
-|P_009 |FALSE  | 1983| 23.355315|
-|P_010 |FALSE  | 1965| 32.780991|
-|P_011 |FALSE  | 1962| 33.141728|
-|P_012 |TRUE   | 1976| 15.938454|
-|P_013 |TRUE   | 1989| 43.186279|
+|p     |female |    y|        x|
+|:-----|:------|----:|--------:|
+|P_001 |FALSE  | 1985| 47.62042|
+|P_002 |TRUE   | 1986| 45.16036|
+|P_003 |FALSE  | 1988| 14.32108|
+|P_004 |FALSE  | 1987| 31.94396|
+|P_005 |TRUE   | 1985| 26.52158|
+|P_006 |FALSE  | 1994| 10.83044|
+|P_007 |TRUE   | 1975| 16.84603|
+|P_008 |FALSE  | 1983| 17.50974|
+|P_009 |FALSE  | 1986| 16.63738|
+|P_010 |FALSE  | 1983| 26.78688|
+|P_011 |FALSE  | 1981| 42.30515|
+|P_012 |FALSE  | 1982| 19.46827|
+|P_013 |FALSE  | 1988| 32.31489|
 
 Example code
 ===
@@ -170,20 +174,20 @@ incremental: false
 
 |participant_id | year_of_birth| performance|gender | performance_z| age|
 |:--------------|-------------:|-----------:|:------|-------------:|---:|
-|P_001          |          1987|   13.879390|Male   |    -0.6627530|  31|
-|P_002          |          1974|   35.076083|Male   |     0.7239773|  44|
-|P_003          |          1969|    6.965215|Female |    -1.1150924|  49|
-|P_004          |          1965|   14.926262|Female |    -0.5942646|  53|
-|P_005          |          1972|   19.914346|Male   |    -0.2679341|  46|
-|P_006          |          1987|   37.925976|Female |     0.9104230|  31|
-|P_007          |          1989|   20.377774|Female |    -0.2376157|  29|
-|P_008          |          1984|   39.155802|Male   |     0.9908807|  34|
-|P_009          |          1983|   23.355315|Male   |    -0.0428189|  35|
-|P_010          |          1965|   32.780991|Male   |     0.5738278|  53|
-|P_011          |          1962|   33.141728|Male   |     0.5974279|  56|
-|P_012          |          1976|   15.938454|Female |    -0.5280449|  42|
-|P_013          |          1989|   43.186279|Female |     1.2545627|  29|
-|P_014          |          1969|   43.130715|Male   |     1.2509276|  49|
+|P_001          |          1985|    47.62042|Male   |     1.3725625|  33|
+|P_002          |          1986|    45.16036|Female |     1.2155432|  32|
+|P_003          |          1988|    14.32108|Male   |    -0.7528495|  30|
+|P_004          |          1987|    31.94396|Male   |     0.3719737|  31|
+|P_005          |          1985|    26.52158|Female |     0.0258774|  33|
+|P_006          |          1994|    10.83044|Male   |    -0.9756484|  24|
+|P_007          |          1975|    16.84603|Female |    -0.5916887|  43|
+|P_008          |          1983|    17.50974|Male   |    -0.5493258|  35|
+|P_009          |          1986|    16.63738|Male   |    -0.6050058|  32|
+|P_010          |          1983|    26.78688|Male   |     0.0428105|  35|
+|P_011          |          1981|    42.30515|Male   |     1.0333019|  37|
+|P_012          |          1982|    19.46827|Male   |    -0.4243175|  36|
+|P_013          |          1988|    32.31489|Male   |     0.3956495|  30|
+|P_014          |          1983|    42.16459|Male   |     1.0243304|  35|
 
 
 Programming principles and tips
@@ -228,12 +232,11 @@ Goals of programming
 ===
 
 - Do not use R (or MATLAB, Python, LabVIEW...) exclusively like a "tool"
-- Think of yourself as creator of tools using these languages
-- You are both a user and creator of these tools
+- Platform for developing ideal tools
 - Imagine yourself as a naive user of these tools
 
 
-Good code summary
+Summary
 ===
 
 - Code is for humans, not for computers
