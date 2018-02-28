@@ -1,0 +1,101 @@
+---
+title: "Example data processing"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+## Load data
+
+Data is in CSV files, within participant > session folders. First we will find all trial_results CSV files
+
+```{r load}
+files <- list.files(path = "data/postural_sway",
+                    recursive = TRUE,
+                    pattern = "*trial_results.csv",
+                    full.names = TRUE)
+```
+
+Load each file and store in large dataframe
+
+```{r message=FALSE, warning=FALSE}
+trials_data <- map_dfr(files, read_csv) %>% 
+  mutate(duration = end_time - start_time) %>% 
+  select(-block_num, -trial_num_in_block, -start_time, -end_time)
+
+head(trials_data, n = 10)
+```
+
+## Preprocess
+
+Filter out errors
+
+```{r}
+trials_data <- trials_data %>% 
+  filter(ppid != "p22" & ppid != "p27")
+```
+
+Get path length for each trial
+
+```{r message=FALSE}
+
+read_path_length <- function(filepath){
+  
+  head_movement <- read_csv(filepath)
+  
+  sum((diff(head_movement$pos_x)^2 +
+        diff(head_movement$pos_y)^2 +
+        diff(head_movement$pos_z)^2
+      )^0.5)
+}
+
+
+trials_data <- trials_data %>% 
+  mutate(path_length = map_dbl(paste("data",
+                                   head_movement_relpath,
+                                   sep = "/"),
+                             read_path_length))
+  
+
+head(trials_data)
+```
+
+See on graph
+
+```{r}
+ggplot(trials_data, aes(x = assessment_type, y = path_length, fill = assessment_type)) + 
+  geom_boxplot() +
+  facet_grid(~session_num)
+```
+
+Merge with participant list
+
+```{r message=FALSE}
+pplist <- read_csv("data/participant_list.csv")
+
+trials_data <- trials_data %>% 
+  left_join(pplist, by = "ppid")
+```
+
+## Visualisation
+
+Gender differences
+
+```{r}
+
+ggplot(trials_data, aes(x = assessment_type, y = path_length, group = gender)) + 
+  geom_point(aes(color = gender), alpha = .2, position = position_dodge(width = 0.3)) + 
+  stat_summary(fun.y = mean, geom = "point", position = position_dodge(width = 0.3), color = "black") +
+  stat_summary(fun.data = mean_se, geom = "errorbar", position = position_dodge(width = 0.3), color = "black", width = 0.2) +
+  facet_grid(session_num~.) + 
+  scale_y_continuous(limits = c(0, 0.8))
+
+
+```
+
+
